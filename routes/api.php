@@ -13,6 +13,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
 });
 
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    // Admin routes
+Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::apiResource('products', App\Http\Controllers\Api\Admin\ProductController::class);
 });
