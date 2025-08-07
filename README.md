@@ -1,61 +1,131 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PandaStore API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A beginner-friendly e-commerce RESTful API built with Laravel, featuring proper resource and request classes. This project includes user authentication, product management, order processing, and SSLCommerz payment gateway integration.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Authentication System**: Register, login, and logout functionality with Laravel Sanctum
+- **Role-Based Access**: Admin and regular user roles with appropriate middleware protection
+- **Product Management**: CRUD operations for products with image upload capability
+- **Order Processing**: Create and manage orders with integrated payment processing
+- **SSLCommerz Integration**: Secure payment gateway with success, fail, and cancel callbacks
+- **API Resources**: Properly structured JSON responses using Laravel's Resource classes
+- **Form Request Validation**: Request validation using dedicated Form Request classes
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## API Endpoints
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Authentication
 
-## Learning Laravel
+- `POST /api/register` - Register a new user
+- `POST /api/login` - Login and get authentication token
+- `GET /api/logout` - Logout and invalidate token (requires authentication)
+- `GET /api/profile` - Get authenticated user profile information
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### User Endpoints (Requires Authentication)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- `GET /api/orders` - Get user's orders
+- `POST /api/orders` - Place a new order with payment processing
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Admin Endpoints (Requires Admin Role)
 
-## Laravel Sponsors
+- `GET /api/admin/products` - List all products
+- `POST /api/admin/products` - Create a new product
+- `GET /api/admin/products/{product}` - Get product details
+- `PUT /api/admin/products/{product}` - Update a product
+- `DELETE /api/admin/products/{product}` - Delete a product
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Payment Callbacks
 
-### Premium Partners
+- `POST /api/payment/success` - Handle successful payment
+- `POST /api/payment/fail` - Handle failed payment
+- `POST /api/payment/cancel` - Handle cancelled payment
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Project Structure
 
-## Contributing
+The project follows Laravel's standard structure with some key components:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Models
+- `User.php` - User model with authentication capabilities
+- `Product.php` - Product model with fillable attributes
+- `Order.php` - Order model with relationships to User and Product
 
-## Code of Conduct
+### Controllers
+- `AuthController.php` - Handles user authentication
+- `Admin/ProductController.php` - Admin product management
+- `User/ProductController.php` - User product listing
+- `User/OrderController.php` - Order creation and payment processing
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Resources
+- `ProductResource.php` - Transforms product model for admin API responses
+- `UserProductResource.php` - Transforms product model for user API responses
+- `OrderResource.php` - Transforms order model with product relationship
 
-## Security Vulnerabilities
+### Requests
+- `StoreProductRequest.php` - Validates product creation
+- `UpdateProductRequest.php` - Validates product updates
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Services
+- `SSLCommerz.php` - Service class for payment gateway integration
 
-## License
+## Getting Started
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Prerequisites
+- PHP 8.2 or higher
+- Composer
+- MySQL or SQLite database
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/mabdusshakur/PandaStoreAPI.git
+cd PandaStoreAPI
+```
+
+2. Install dependencies
+```bash
+composer install
+```
+
+3. Create environment file
+```bash
+cp .env.example .env
+```
+
+4. Configure your database and SSLCommerz credentials in the `.env` file
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=pandastore
+DB_USERNAME=root
+DB_PASSWORD=
+
+SSLCOMMERZ_STORE_ID=your_store_id
+SSLCOMMERZ_STORE_PASSWORD=your_store_password
+SSLCOMMERZ_SANDBOX_MODE=true
+```
+
+5. Generate application key
+```bash
+php artisan key:generate
+```
+
+6. Run migrations and seeders
+```bash
+php artisan migrate --seed
+```
+
+7. Create storage link for product images
+```bash
+php artisan storage:link
+```
+
+8. Start the development server
+```bash
+php artisan serve
+```
+
+## Testing the API
+
+You can use the included Postman collection `PandaStoreAPI.postman_collection.json` to test all API endpoints.
